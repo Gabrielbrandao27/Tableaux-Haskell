@@ -43,13 +43,13 @@ trian r = [(a,b,c) | c <- [1..r], b <- [1..c], a <- [1..b], a^2 + b^2 == c^2] --
 fact x = product [x | x <- [1..x]] -- simple factorial function that multiplies every element on the list
 
 
--- Creating functions
+-- Creating functions with matching patterns
 
 lucky :: (Integral a) => a -> String
 lucky 7 = "Lucky 7777777"
 lucky x = "Nop..."
 
-factorial :: Integer -> Integer
+factorial :: (Integral a) => a -> a
 factorial n = product [1..n]
 
 factRecu :: (Integral a) => a -> a
