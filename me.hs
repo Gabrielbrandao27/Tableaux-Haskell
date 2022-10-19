@@ -76,3 +76,8 @@ third (_,_,z) = z
 
 addVet' :: (Num a) => (a, a, a) -> (a, a, a) -> (a, a, a)
 addVet' a b = (first a + first b, second a + second b, third a + third b)
+
+head' :: [a] -> a
+head' [] = error "List is Empty"
+head' (x:_) = x
+
