@@ -10,7 +10,6 @@ doubleUs x y = doubleMe x + doubleMe y
 
 doubleSmallNumber x = if x > 100 then x else x*2
 
-
 -- List comprehension
 -- the part before the pipe is the output function
 
@@ -81,3 +80,42 @@ head' :: [a] -> a
 head' [] = error "List is Empty"
 head' (x:_) = x
 
+tell :: (Show a) => [a] -> String
+tell [] = "The list is empty"
+tell (x:[]) = "The list has one element: " ++ show x -- Could be tell [x]
+tell (x:y:[]) = "The list has two elements: " ++ show x ++ " and " ++ show y -- Could be tell [x, y]
+tell (x:y:_) = "This list is long. The first two elements are: " ++ show x ++ " and " ++ show y
+
+length2 :: (Num b) => [a] -> b
+length2 [] = 0
+length2 (_:xs) = 1 + length' xs
+
+sum' :: (Num a) => [a] -> a
+sum' [] = 0
+sum' (x:xs) = x + sum' xs
+
+capital :: String -> String
+capital "" = "Empty string, whoops!"
+capital all@(x:xs) = "The first letter of " ++ all ++ " is " ++ [x]
+
+bmiTell :: (RealFloat a) => a -> a -> String
+bmiTell weight height
+    | bmi <= underweight = "Underweight"
+    | bmi <= regular     = "Regular"
+    | bmi <= overweight  = "Overweight"
+    | otherwise     = "Obese"
+    where bmi = weight / height ^ 2
+          (underweight, regular, overweight) = (18.5, 25.0, 30.0)
+
+max' :: (Ord a) => a -> a -> a
+max' a b
+    | a > b     = a
+    | otherwise = b
+
+maximum' :: (Ord a) => [a] -> a
+maximum' [] = error "maximum of empty list"
+maximum' [x] = x
+maximum' (x:xs)
+    | x > maxTail = x
+    | otherwise = maxTail
+    where maxTail = maximum' xs
