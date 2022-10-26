@@ -119,3 +119,26 @@ maximum' (x:xs)
     | x > maxTail = x
     | otherwise = maxTail
     where maxTail = maximum' xs
+
+-- Other way to do maximum'
+maximum2' :: (Ord a) => [a] -> a
+maximum2' [] = error "Empty"
+maximum2' [x] = x
+maximum2' (x:xs) = max x (maximum2' xs)
+
+-- building my minimum':
+minimum' :: (Ord a) => [a] -> a
+minimum' [] = error "Empty"
+minimum' [x] = x
+minimum' (x:xs) = min x (minimum' xs) -- Success
+
+replicate' :: (Num i, Ord i) => i -> a -> [a]
+replicate' n x
+    | n <= 0 = []
+    | otherwise = x: replicate' (n-1) x
+
+take' :: (Num i, Ord i) => i -> [a] -> [a]
+take' n _
+    | n <= 0  = []
+take' _ []    = []
+take' n (x:xs) = x : take' (n-1) xs
