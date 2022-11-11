@@ -8,16 +8,16 @@ ajeita str = (prim, op, seg)
           seg = reverse (take 5 (reverse str))
 
 
-operador :: (a, b, c) -> b
+operador :: ([Char], Char, [Char]) -> Char
 operador (_,b,_) = b
 
 
-regra :: String -> Char -> ((Char, [Char]), (Char, [Char]))
+{-regra :: String -> Char -> ((Char, [Char]), (Char, [Char]))
 regra str op
     | op == 'v' = (('V', prim), ('V', seg))
     otherwise error "Empty"
     where prim = take 5 str
-          seg = reverse (take 5 (reverse str))
+          seg = reverse (take 5 (reverse str))-}
 
 
 input :: IO ()
