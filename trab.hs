@@ -1,4 +1,4 @@
---formula = ("aVb", "V", "a^b")
+
 str = "(aVb)V(a^b)"
 
 ajeita :: String -> ([Char], Char, [Char])
@@ -8,6 +8,16 @@ ajeita str = (prim, op, seg)
           seg = reverse (take 5 (reverse str))
 
 
-
 operador ::(a, b, c) -> b
 operador (_,b,_) = b
+
+
+
+main :: IO ()
+main = do
+    putStrLn ("Digite sua formula: ")
+    entrada <- getLine
+    print ("formula = " ++ entrada)
+
+
+    
