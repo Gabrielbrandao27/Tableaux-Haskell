@@ -1,5 +1,5 @@
 
-str = "(aVb)V(a^b)"
+formula = "(avb)v(a^b)"
 
 ajeita :: String -> ([Char], Char, [Char])
 ajeita str = (prim, op, seg)
@@ -8,16 +8,21 @@ ajeita str = (prim, op, seg)
           seg = reverse (take 5 (reverse str))
 
 
-operador ::(a, b, c) -> b
+operador :: (a, b, c) -> b
 operador (_,b,_) = b
 
 
+regra :: String -> Char -> ((Char, [Char]), (Char, [Char]))
+regra str op
+    | op == 'v' = (('V', prim), ('V', seg))
+    otherwise error "Empty"
+    where prim = take 5 str
+          seg = reverse (take 5 (reverse str))
 
-main :: IO ()
-main = do
+
+input :: IO ()
+input = do
     putStrLn ("Digite sua formula: ")
     entrada <- getLine
     print ("formula = " ++ entrada)
-
-
     
