@@ -1,3 +1,10 @@
+{-ajeita :: [Char] -> [String]
+ajeita str = [val, p, op, s]
+    where val = take 1 str
+          p = take 5 (tail str) 
+          op = take 1 (reverse (take 7 str))
+          s = reverse (take 5 (reverse str))
+-}
 
 formula = "F(avb)~(a^b)"
 formulaPrefix = "(v(v(a,b),^(a,b)))"
