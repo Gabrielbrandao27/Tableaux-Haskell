@@ -81,9 +81,21 @@ z = ajeita2 gal12
 m = ajeita2 gal21
 n = ajeita2 gal22
 
-{-contradicao :: [String] -> String
-contradicao formula1 formula2
-    | a /= b = contradicao formula1 formula2
-    | a == b = if "sem contradicao -> formula falsa"
-    where a = take 1 (reverse (head formula1))
-          b = take 1 (reverse (last formula2))-}
+listToString :: [String] -> String
+listToString gal = head gal ++ last gal
+
+galhos = [gal1, gal2, gal11, gal12, gal21, gal22]
+
+{-extract :: [[String]] -> [String]
+extract galhos = [pai | pai <- galhos, pai <- head galhos]-}
+
+{-contradicao :: [[String]] -> String
+contradicao galhos
+    | a /= b = 1 + contradicao galhos
+    | a == b = ""
+    
+    where a = last (last galhos)
+          b = 
+
+
+-}
