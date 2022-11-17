@@ -34,23 +34,32 @@ regra x
 
 resultx = regra x
 
-galho1 :: [String] -> String -> [String]
-galho1 result formula = [pai, filho]
+stringToList :: String -> [String]
+stringToList form = [form]
+
+listFormula = stringToList formula
+
+galho1 :: [String] -> [String] -> [String]
+galho1 result form = [pai, filho]
     where filho = head result ++ head (tail result)
-          pai = formula
+          pai = last form
 
 galho2 :: [String] -> [String] -> [String]
 galho2 result gal1  = [pai, filho]
     where filho = head (tail (tail result)) ++ last (init result)
           pai = last gal1
 
-gal1 = galho1 resultx formula
+gal1 = galho1 resultx listFormula
 gal2 = galho2 resultx gal1
 
 ajeita2 :: [String] -> [String]
-ajeita2 gal1 = [value, prim, op, seg]
-    where value = take 1 (last gal1)
+ajeita2 gal1
+    | length form >= 3 = [value, prim, op, seg]
+    | otherwise = [value++prim2]
+    where form = last gal1
+          value = take 1 (last gal1)
           prim = take 1 (tail (tail (last gal1)))
+          prim2 = take 1 (tail (last gal1))
           op = take 1 (tail (tail (tail (last gal1))))
           seg = take 1 (tail (reverse (last gal1)))
 
@@ -59,6 +68,18 @@ w = ajeita2 gal2
 
 resulty = regra y
 resultw = regra w
+
+gal11 = galho1 resulty gal1
+gal12 = galho2 resulty gal1
+
+gal21 = galho1 resultw gal12
+gal22 = galho2 resultw gal12
+
+u = ajeita2 gal11
+z = ajeita2 gal12
+
+m = ajeita2 gal21
+n = ajeita2 gal22
 
 {-arvore :: [String] -> [String] -> [String]
 arvore result formula gal
