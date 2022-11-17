@@ -5,7 +5,6 @@ main = do
     print ("formula = " ++ formula)
 
 formula = "F(avb)v(a^b)"
---formulaPrefix = "(v(v(a,b),^(a,b)))"
 
 ajeita :: String -> [String]
 ajeita str = [value, prim, op, seg]
@@ -13,8 +12,6 @@ ajeita str = [value, prim, op, seg]
           prim = take 5 (tail str) 
           op = take 1 (tail (tail (tail (tail (tail (tail formula))))))
           seg = reverse (take 5 (reverse str))
-
-x = ajeita formula
 
 regra :: [String] -> [String]
 regra x
@@ -32,7 +29,10 @@ regra x
           prim = head (tail x)
           seg = last x
 
-resultx = regra x
+ajeitaMaisRegra :: String -> [String]
+ajeitaMaisRegra formula = regra (ajeita formula)
+
+resultx = ajeitaMaisRegra formula
 
 stringToList :: String -> [String]
 stringToList form = [form]
@@ -53,24 +53,24 @@ gal1 = galho1 resultx listFormula
 gal2 = galho2 resultx gal1
 
 ajeita2 :: [String] -> [String]
-ajeita2 gal1
+ajeita2 formula
     | length form >= 3 = [value, prim, op, seg]
     | otherwise = [value++prim2]
-    where form = last gal1
-          value = take 1 (last gal1)
-          prim = take 1 (tail (tail (last gal1)))
-          prim2 = take 1 (tail (last gal1))
-          op = take 1 (tail (tail (tail (last gal1))))
-          seg = take 1 (tail (reverse (last gal1)))
+    where form = last formula
+          value = take 1 (last formula)
+          prim = take 1 (tail (tail (last formula)))
+          prim2 = take 1 (tail (last formula))
+          op = take 1 (tail (tail (tail (last formula))))
+          seg = take 1 (tail (reverse (last formula)))
 
-y = ajeita2 gal1
-w = ajeita2 gal2
+ajeita2MaisRegra :: [String] -> [String]
+ajeita2MaisRegra formula = regra (ajeita2 formula)
 
-resulty = regra y
-resultw = regra w
+resulty = ajeita2MaisRegra gal1
+resultw = ajeita2MaisRegra gal2
 
 gal11 = galho1 resulty gal1
-gal12 = galho2 resulty gal1
+gal12 = galho2 resulty gal11
 
 gal21 = galho1 resultw gal12
 gal22 = galho2 resultw gal12
@@ -81,10 +81,9 @@ z = ajeita2 gal12
 m = ajeita2 gal21
 n = ajeita2 gal22
 
-{-arvore :: [String] -> [String] -> [String]
-arvore result formula gal
-    | x == ";" = p
-    | x == "/" = s
-    where x = last result
-          p = gal
-          s = gal-}
+{-contradicao :: [String] -> String
+contradicao formula1 formula2
+    | a /= b = contradicao formula1 formula2
+    | a == b = if "sem contradicao -> formula falsa"
+    where a = take 1 (reverse (head formula1))
+          b = take 1 (reverse (last formula2))-}

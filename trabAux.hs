@@ -13,6 +13,45 @@ main = do
     gal2 $ galho2 result gal1
 
 
+oi :: String -> [String]
+oi formula = regra (ajeita formula)
+
+tchau :: [String] -> [String]
+tchau formula = regra (ajeita2 formula)
+
+
+formula = "F(avb)v(a^b)"
+
+x = ajeita formula -- ["F","(avb)","v","(a^b)"]
+
+resultx = regra x -- ["F","(avb)","F","(a^b)",";"]
+
+listFormula = stringToList formula
+
+gal1 = galho1 resultx listFormula -- ["F(avb)v(a^b)","F(avb)"]
+gal2 = galho2 resultx gal1 -- ["F(avb)","F(a^b)"]
+
+y = ajeita2 gal1 -- ["F","a","v","b"]
+w = ajeita2 gal2 -- ["F","a","^","b"]
+
+resulty = regra y -- ["F","a","F","b",";"]
+resultw = regra w -- ["F","a","F","b","/"]
+
+gal11 = galho1 resulty gal1 -- ["F(avb)","Fa"]
+gal12 = galho2 resulty gal11 -- ["Fa","Fb"]
+
+gal21 = galho1 resultw gal12 -- ["Fb","Fa"]
+gal22 = galho2 resultw gal12 -- ["Fb","Fb"]
+
+u = ajeita2 gal11 -- ["Fa"]
+z = ajeita2 gal12 -- ["Fb"]
+
+m = ajeita2 gal21 -- ["Fa"]
+n = ajeita2 gal22 -- ["Fb"]
+
+
+
+
 --formula = "F(avb)v(a^b)"
 --formulaPrefix = "(v(v(a,b),^(a,b)))"
 
