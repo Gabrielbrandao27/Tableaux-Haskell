@@ -75,27 +75,114 @@ gal12 = galho2 resulty gal11
 gal21 = galho1 resultw gal12
 gal22 = galho2 resultw gal12
 
-u = ajeita2 gal11
-z = ajeita2 gal12
+{-listToString :: [String] -> String
+listToString gal = head gal ++ last gal-}
 
-m = ajeita2 gal21
-n = ajeita2 gal22
+no1 = formula
+no2 = last gal1
+no3 = last gal2
+no4 = head (ajeita2 gal11)
+no5 = head (ajeita2 gal12)
+no6 = head (ajeita2 gal21)
+no7 = head (ajeita2 gal22)
 
-listToString :: [String] -> String
-listToString gal = head gal ++ last gal
+nos = [no1, no2, no3, no4, no5, no6, no7]
 
 galhos = [gal1, gal2, gal11, gal12, gal21, gal22]
 
-{-extract :: [[String]] -> [String]
-extract galhos = [pai | pai <- galhos, pai <- head galhos]-}
+{-
+compara :: String -> String -> Int -> Bool
+compara no1 no2 n
+    | n == 1 = if a == b then True 
+        else False
+    | otherwise = if c == d then True
+        else False
+    where a = take 1 (reverse no1)
+          b = take 1 (reverse no2)
+          c = take 1 (no1)
+          d = take 1 (no2)
+-}
 
-{-contradicao :: [[String]] -> String
-contradicao galhos
-    | a /= b = 1 + contradicao galhos
-    | a == b = ""
-    
-    where a = last (last galhos)
-          b = 
+compara :: String -> String -> Bool
+compara no1 no2
+    | no1 /= no2 = if a == b then 
+                        if c /= d then 
+                            True
+                        else 
+                            False
+                    else 
+                        False
+    | otherwise = False
+    where a = take 1 (reverse no1)
+          b = take 1 (reverse no2)
+          c = take 1 (no1)
+          d = take 1 (no2)
+
+remove :: [String] -> [String]
+remove nos = init nos
+
+avanca :: [String] -> [String]
+avanca nos = tail nos
+
+contradicao :: [String] -> String -> String -> String
+contradicao nos no1 no2
+    | no1 /= no2 = if compara no1 no2 then "Contradicao"
+                        else contradicao (remove aux1) (head (remove aux1)) (last (remove aux1))
+    | otherwise = contradicao (avanca aux2) (head (avanca aux2)) (last (avanca aux2))
+    where aux1 = nos
+          aux2 = nos
+
+{-
+
+
+contradicao :: [String] -> String -> String -> String
+contradicao nos no1 no2
+    | no1 /= no2 = if (compara no1 no2 1) then
+                        if (compara no1 no2 2) then
+                            contradicao (remove aux) no1 (last (remove aux))
+                        else "Contradicao"
+                    else contradicao  (remove aux) no1 (last (remove aux))
+    | no1 == no2 = contradicao (avanca nos) (head nos) (last nos)
+    | otherwise = "nao ha contradicao"
+    where aux = nos
+
+
+
+
+
+compara :: String -> String -> Bool
+compara no1 no2
+    | no1 /= no2 = if a == b then 
+                        if c /= d then 
+                            True
+                        else 
+                            False
+                    else 
+                        False
+    | otherwise = False
+    where a = take 1 (reverse no1)
+          b = take 1 (reverse no2)
+          c = take 1 (no1)
+          d = take 1 (no2)
+
+
+contradicao :: [String] -> String -> String -> String
+contradicao nos no1 no2
+    | no1 /= no2 = if compara no1 no2 then "Contradicao"
+                        else contradicao (remove aux1) (head (remove aux1)) (last (remove aux1))
+    | otherwise = contradicao (avanca aux2) (head (avanca aux2)) (last (avanca aux2))
+    where aux1 = nos
+          aux2 = nos
+
+
+
+
+
+
+EX:
+["F(avb)v(a^b)","F(avb)","F(a^b)","Fa","Fb","Fa","Fb"] "F(avb)v(a^b)" "Fb"
+    "F(avb)v(a^b)" /= "Fb"
+        compara "F(avb)v(a^b)" "Fb" 1
 
 
 -}
