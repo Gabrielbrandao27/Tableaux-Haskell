@@ -75,33 +75,65 @@ gal12 = galho2 resulty gal11
 gal21 = galho1 resultw gal12
 gal22 = galho2 resultw gal12
 
-{-listToString :: [String] -> String
-listToString gal = head gal ++ last gal-}
-
-no1 = formula
-no2 = last gal1
-no3 = last gal2
-no4 = head (ajeita2 gal11)
-no5 = head (ajeita2 gal12)
-no6 = head (ajeita2 gal21)
-no7 = head (ajeita2 gal22)
-
-nos = [no1, no2, no3, no4, no5, no6, no7]
-
 galhos = [gal1, gal2, gal11, gal12, gal21, gal22]
 
-{-
-compara :: String -> String -> Int -> Bool
-compara no1 no2 n
-    | n == 1 = if a == b then True 
-        else False
-    | otherwise = if c == d then True
-        else False
+pegaNo :: [String] -> String
+pegaNo gal = last gal
+
+pegaNo2 :: [String] -> String
+pegaNo2 gal = head (ajeita2 gal)
+
+no1 = formula
+no2 = pegaNo gal1
+no3 = pegaNo gal2
+no4 = pegaNo2 gal11
+no5 = pegaNo2 gal12
+no6 = pegaNo2 gal21
+no7 = pegaNo2 gal22
+
+nos = [no1, no2, no3, no4, no5, no6, no7] -- ["F(avb)v(a^b)","F(avb)","F(a^b)","Fa","Fb","Fa","Fb"]
+
+head' :: [String] -> String
+head' [] = ""
+head' (x:xs) = x
+
+last' :: [String] -> String
+last' [] = ""
+last' (x:[]) = x
+last' (x:xs) = last' xs
+
+compara :: String -> String -> Bool
+compara no1 no2 = if a == b then 
+                    if c /= d then 
+                        True
+                    else 
+                        False
+                else 
+                    False
     where a = take 1 (reverse no1)
           b = take 1 (reverse no2)
           c = take 1 (no1)
           d = take 1 (no2)
--}
+
+removeUlt :: [String] -> [String]
+removeUlt nos = init nos
+
+avancaUm :: [String] -> [String]
+avancaUm nos = tail nos
+
+contradicao :: [String] -> String -> String -> String
+contradicao nos no1 no2
+    | (nos == [] || aux1 == [] || aux2 == []) = "Nao ha contradicao"
+
+    | no1 /= no2 = if compara no1 no2 then "Contradicao"
+                        else contradicao aux1 (head' aux1) (last' aux1)
+    | no1 == no2 = contradicao aux2 (head' aux2) (last' aux2)
+
+    where aux1 = (removeUlt nos)
+          aux2 = (avancaUm nos)
+
+
+{-
 
 compara :: String -> String -> Bool
 compara no1 no2
@@ -118,71 +150,52 @@ compara no1 no2
           c = take 1 (no1)
           d = take 1 (no2)
 
-remove :: [String] -> [String]
-remove nos = init nos
-
-avanca :: [String] -> [String]
-avanca nos = tail nos
-
 contradicao :: [String] -> String -> String -> String
 contradicao nos no1 no2
+    | (nos == [] || aux1 == [] || aux2 == []) = "Nao ha contradicao"
+
     | no1 /= no2 = if compara no1 no2 then "Contradicao"
-                        else contradicao (remove aux1) (head (remove aux1)) (last (remove aux1))
-    | otherwise = contradicao (avanca aux2) (head (avanca aux2)) (last (avanca aux2))
-    where aux1 = nos
-          aux2 = nos
+                        else contradicao aux1 (head' aux1) (last' aux1)
+    | no1 == no2 = contradicao aux2 (head' aux2) (last' aux2)
 
-{-
+    where aux1 = (removeUlt nos)
+          aux2 = (avancaUm nos)
 
+-----------------------------------------------------------------------------
+indexOf :: (Eq a) => a -> [a] -> Int
+indexOf n [] = -1
+indexOf n (x : xs)
+  | n == x = 0
+  | otherwise = case n `indexOf` xs of
+      -1 -> -1
+      i -> i + 1
 
-contradicao :: [String] -> String -> String -> String
-contradicao nos no1 no2
-    | no1 /= no2 = if (compara no1 no2 1) then
-                        if (compara no1 no2 2) then
-                            contradicao (remove aux) no1 (last (remove aux))
-                        else "Contradicao"
-                    else contradicao  (remove aux) no1 (last (remove aux))
-    | no1 == no2 = contradicao (avanca nos) (head nos) (last nos)
-    | otherwise = "nao ha contradicao"
-    where aux = nos
+getIndexOf :: Char -> String -> String -> Int
+getIndexOf c str = head . (filter (> -1) . map (\y -> if y == c then indexOf y str else -1))
 
+countOpenParens :: String -> Int
+countOpenParens str = length $ filter (== '(') str
 
+countCloseParens :: String -> Int
+countCloseParens str = length $ filter (== ')') str
 
+getFirstPart :: Char -> String -> String -> String
+getFirstPart c str = head . (filter (not . null) . map (\y -> if y == c then take (getIndexOf c str str) str else []))
 
+splitAtIndex :: Int -> [Char] -> ([Char], [Char])
+splitAtIndex = \n -> \xs -> (take n xs, drop (n + 1) xs)
 
-compara :: String -> String -> Bool
-compara no1 no2
-    | no1 /= no2 = if a == b then 
-                        if c /= d then 
-                            True
-                        else 
-                            False
-                    else 
-                        False
-    | otherwise = False
-    where a = take 1 (reverse no1)
-          b = take 1 (reverse no2)
-          c = take 1 (no1)
-          d = take 1 (no2)
-
-
-contradicao :: [String] -> String -> String -> String
-contradicao nos no1 no2
-    | no1 /= no2 = if compara no1 no2 then "Contradicao"
-                        else contradicao (remove aux1) (head (remove aux1)) (last (remove aux1))
-    | otherwise = contradicao (avanca aux2) (head (avanca aux2)) (last (avanca aux2))
-    where aux1 = nos
-          aux2 = nos
-
-
-
-
-
-
-EX:
-["F(avb)v(a^b)","F(avb)","F(a^b)","Fa","Fb","Fa","Fb"] "F(avb)v(a^b)" "Fb"
-    "F(avb)v(a^b)" /= "Fb"
-        compara "F(avb)v(a^b)" "Fb" 1
-
+splitProgramsFunc :: String -> String -> (String, String)
+splitProgramsFunc str =
+  head
+    . ( filter (not . null . fst)
+          . map
+            ( \y ->
+                ( if (y == '>' || y == '^' || y == 'v') && (countOpenParens (getFirstPart y str str) == countCloseParens (getFirstPart y str str))
+                    then splitAtIndex (getIndexOf y str str) str
+                    else ("", "")
+                )
+            )
+      )
 
 -}
