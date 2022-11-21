@@ -83,15 +83,19 @@ pegaNo gal = last gal
 pegaNo2 :: [String] -> String
 pegaNo2 gal = head (ajeita2 gal)
 
-no1 = formula
-no2 = pegaNo gal1
-no3 = pegaNo gal2
-no4 = pegaNo2 gal11
-no5 = pegaNo2 gal12
-no6 = pegaNo2 gal21
-no7 = pegaNo2 gal22
+-- ["F(avb)v(a^b)","F(avb)","F(a^b)","Fa","Fb","Fa","Fb"]
 
-nos = [no1, no2, no3, no4, no5, no6, no7] -- ["F(avb)v(a^b)","F(avb)","F(a^b)","Fa","Fb","Fa","Fb"]
+makeNo :: [String] -> [String] -> [String] -> [String] -> [String] -> [String] -> [String]
+makeNo gal1 gal2 gal11 gal12 gal21 gal22 = 
+    [formula, 
+    pegaNo (galho1 (ajeitaMaisRegra formula) (stringToList formula)), 
+    pegaNo gal2, 
+    pegaNo2 gal11, 
+    pegaNo2 gal12,
+    pegaNo2 gal21, 
+    pegaNo2 gal22]
+
+nos = makeNo gal1 gal2 gal11 gal12 gal21 gal22
 
 head' :: [String] -> String
 head' [] = ""
@@ -132,34 +136,34 @@ contradicao nos no1 no2
     where aux1 = (removeUlt nos)
           aux2 = (avancaUm nos)
 
+arvore :: [String] -> [String] -> [String] -> [String] -> [String]
+arvore result mesmo dif1 dif2
+    | a == ";" = [x++y] ++ [w++z]
+    | a == "/" = (x++y):dif1 ++ (w++z):dif2
+    where a = last result
+          x = head' result
+          y = head' (tail result)
+          w = last' (init (init result))
+          z = last' (init result)
 
 {-
 
-compara :: String -> String -> Bool
-compara no1 no2
-    | no1 /= no2 = if a == b then 
-                        if c /= d then 
-                            True
-                        else 
-                            False
-                    else 
-                        False
-    | otherwise = False
-    where a = take 1 (reverse no1)
-          b = take 1 (reverse no2)
-          c = take 1 (no1)
-          d = take 1 (no2)
+juntaGalhos :: [String] -> String
+juntaGalhos result lista = (x++y):(w++z):lista
+    where x = head' result
+          y = head' (tail result)
+          w = last' (init (init result))
+          z = last' (init result)
 
-contradicao :: [String] -> String -> String -> String
-contradicao nos no1 no2
-    | (nos == [] || aux1 == [] || aux2 == []) = "Nao ha contradicao"
-
-    | no1 /= no2 = if compara no1 no2 then "Contradicao"
-                        else contradicao aux1 (head' aux1) (last' aux1)
-    | no1 == no2 = contradicao aux2 (head' aux2) (last' aux2)
-
-    where aux1 = (removeUlt nos)
-          aux2 = (avancaUm nos)
+arvore :: [String] -> [String] -> [String] -> [String] -> [String]
+arvore result mesmo dif1 dif2
+    | a == ";" = (x++y):(w++z):mesmo
+    | a == "/" = (x++y):dif1 ++ (w++z):dif2
+    where a = last result
+          x = head' result
+          y = head' (tail result)
+          w = last' (init (init result))
+          z = last' (init result)
 
 -----------------------------------------------------------------------------
 indexOf :: (Eq a) => a -> [a] -> Int
