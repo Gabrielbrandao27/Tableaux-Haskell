@@ -152,9 +152,9 @@ avancaUmComposto :: [[String]] -> [[String]]
 avancaUmComposto results = tail results
 
 arvore :: [[String]] -> String
-arvore results = if length results > 0 then arvRegra (head results)
-                    else ""
-arvore (avancaUmComposto results)
+arvore [] = ""
+arvore (x:xs) = arvRegra x ++ "\n" ++ arvore xs
+arvore [x] = arvRegra x
 
 bar :: IO()
 bar = putStrLn (arvore results)
