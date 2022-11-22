@@ -5,6 +5,8 @@ main = do
     print ("formula = " ++ formula)
 
 
+------- Input -------
+
 getProgram :: IO ()
 getProgram = do
   print "Digite a formula para ser verificada: "
@@ -83,6 +85,8 @@ ajeita str = [value, prim, op, seg]
           op = take 1 (tail (tail (tail (tail (tail (tail formula))))))
           seg = reverse (take 5 (reverse str))-}
 
+------- Tableaux -------
+
 regra :: [String] -> [String]
 regra x
     | op == "v" = if val == "V" then ["V", prim, "V", seg, "/"]
@@ -109,11 +113,13 @@ stringToList form = [form]
 
 listFormula = stringToList formula
 
+-- Faz o primeiro galho cujo pai é a fórmula
 galho1 :: [String] -> [String] -> [String]
 galho1 result form = [pai, filho]
     where filho = head result ++ head (tail result)
           pai = last form
 
+-- Faz o segundo galho cujo pai é o primeiro galho
 galho2 :: [String] -> [String] -> [String]
 galho2 result gal1  = [pai, filho]
     where filho = head (tail (tail result)) ++ last (init result)
@@ -145,15 +151,11 @@ gal12 = galho2 resulty gal11
 gal21 = galho1 resultw gal12
 gal22 = galho2 resultw gal12
 
-galhos = [gal1, gal2, gal11, gal12, gal21, gal22]
-
 pegaNo :: [String] -> String
 pegaNo gal = last gal
 
 pegaNo2 :: [String] -> String
 pegaNo2 gal = head (ajeita2 gal)
-
--- ["F(avb)v(a^b)","F(avb)","F(a^b)","Fa","Fb","Fa","Fb"]
 
 makeNo :: [String] -> [String] -> [String] -> [String] -> [String] -> [String] -> [String]
 makeNo gal1 gal2 gal11 gal12 gal21 gal22 = 
@@ -228,35 +230,3 @@ arvore [x] = arvRegra x
 
 bar :: IO()
 bar = putStrLn (formula ++ "\n" ++ arvore results ++ "\n" ++ contradicao nos (head nos) (last nos))
-
-{-
-arvRegra :: [String] -> String
-arvRegra results
-    | a == ";" = (x++y) ++ "\n" ++ (w++z)
-    | a == "/" = (x++y) ++ " " ++ (w++z)
-    where a = last results
-          x = head results
-          y = head (tail results)
-          w = last (init (init results))
-          z = last (init results)
-
-arvore :: [[String]] -> String
-arvore results
-    | results == [] = ""
-    | otherwise = arvRegra (head results)
-
-{
-avancaUmComposto :: [[String]] -> [[String]]
-avancaUmComposto results = tail results
-
-arvore :: [[String]] -> String
-arvore results = arvRegra (head results)
-arvore x
-    | x == [] = ""
-    | otherwise = arvRegra (head results)
-    where x = avancaUmComposto results
-}
-
-bar :: IO()
-bar = putStrLn (arvore results)
--}
