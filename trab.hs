@@ -97,14 +97,14 @@ makeNo gal1 gal2 gal11 gal12 gal21 gal22 =
 
 nos = makeNo gal1 gal2 gal11 gal12 gal21 gal22
 
-head' :: [String] -> String
+{-head' :: [String] -> String
 head' [] = ""
 head' (x:xs) = x
 
 last' :: [String] -> String
 last' [] = ""
 last' (x:[]) = x
-last' (x:xs) = last' xs
+last' (x:xs) = last' xs-}
 
 compara :: String -> String -> Bool
 compara no1 no2 = if a == b then 
@@ -130,76 +130,63 @@ contradicao nos no1 no2
     | (nos == [] || aux1 == [] || aux2 == []) = "Nao ha contradicao"
 
     | no1 /= no2 = if compara no1 no2 then "Contradicao"
-                        else contradicao aux1 (head' aux1) (last' aux1)
-    | no1 == no2 = contradicao aux2 (head' aux2) (last' aux2)
+                        else contradicao aux1 (head aux1) (last aux1)
+    | no1 == no2 = contradicao aux2 (head aux2) (last aux2)
 
     where aux1 = (removeUlt nos)
           aux2 = (avancaUm nos)
 
-arvore :: [String] -> [String] -> [String] -> [String] -> [String]
-arvore result mesmo dif1 dif2
-    | a == ";" = [x++y] ++ [w++z]
-    | a == "/" = (x++y):dif1 ++ (w++z):dif2
-    where a = last result
-          x = head' result
-          y = head' (tail result)
-          w = last' (init (init result))
-          z = last' (init result)
+results = [resultx, resulty, resultw]
+
+arvRegra :: [String] -> String
+arvRegra results
+    | a == ";" = (x++y) ++ "\n" ++ (w++z)
+    | a == "/" = (x++y) ++ " " ++ (w++z)
+    where a = last results
+          x = head results
+          y = head (tail results)
+          w = last (init (init results))
+          z = last (init results)
+
+avancaUmComposto :: [[String]] -> [[String]]
+avancaUmComposto results = tail results
+
+arvore :: [[String]] -> String
+arvore results = if length results > 0 then arvRegra (head results)
+                    else ""
+arvore (avancaUmComposto results)
+
+bar :: IO()
+bar = putStrLn (arvore results)
 
 {-
+arvRegra :: [String] -> String
+arvRegra results
+    | a == ";" = (x++y) ++ "\n" ++ (w++z)
+    | a == "/" = (x++y) ++ " " ++ (w++z)
+    where a = last results
+          x = head results
+          y = head (tail results)
+          w = last (init (init results))
+          z = last (init results)
 
-juntaGalhos :: [String] -> String
-juntaGalhos result lista = (x++y):(w++z):lista
-    where x = head' result
-          y = head' (tail result)
-          w = last' (init (init result))
-          z = last' (init result)
+arvore :: [[String]] -> String
+arvore results
+    | results == [] = ""
+    | otherwise = arvRegra (head results)
 
-arvore :: [String] -> [String] -> [String] -> [String] -> [String]
-arvore result mesmo dif1 dif2
-    | a == ";" = (x++y):(w++z):mesmo
-    | a == "/" = (x++y):dif1 ++ (w++z):dif2
-    where a = last result
-          x = head' result
-          y = head' (tail result)
-          w = last' (init (init result))
-          z = last' (init result)
+{
+avancaUmComposto :: [[String]] -> [[String]]
+avancaUmComposto results = tail results
 
------------------------------------------------------------------------------
-indexOf :: (Eq a) => a -> [a] -> Int
-indexOf n [] = -1
-indexOf n (x : xs)
-  | n == x = 0
-  | otherwise = case n `indexOf` xs of
-      -1 -> -1
-      i -> i + 1
+arvore :: [[String]] -> String
+arvore results = arvRegra (head results)
+arvore x
+    | x == [] = ""
+    | otherwise = arvRegra (head results)
+    where x = avancaUmComposto results
+}
 
-getIndexOf :: Char -> String -> String -> Int
-getIndexOf c str = head . (filter (> -1) . map (\y -> if y == c then indexOf y str else -1))
-
-countOpenParens :: String -> Int
-countOpenParens str = length $ filter (== '(') str
-
-countCloseParens :: String -> Int
-countCloseParens str = length $ filter (== ')') str
-
-getFirstPart :: Char -> String -> String -> String
-getFirstPart c str = head . (filter (not . null) . map (\y -> if y == c then take (getIndexOf c str str) str else []))
-
-splitAtIndex :: Int -> [Char] -> ([Char], [Char])
-splitAtIndex = \n -> \xs -> (take n xs, drop (n + 1) xs)
-
-splitProgramsFunc :: String -> String -> (String, String)
-splitProgramsFunc str =
-  head
-    . ( filter (not . null . fst)
-          . map
-            ( \y ->
-                ( if (y == '>' || y == '^' || y == 'v') && (countOpenParens (getFirstPart y str str) == countCloseParens (getFirstPart y str str))
-                    then splitAtIndex (getIndexOf y str str) str
-                    else ("", "")
-                )
-            )
-      )
-
+bar :: IO()
+bar = putStrLn (arvore results)
 -}
