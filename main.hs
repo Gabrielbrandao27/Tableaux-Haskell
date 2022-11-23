@@ -1,18 +1,12 @@
 
+------- Terminal Interaction ------
+
 main = do
-    putStrLn "Digite sua formula: "
-    formula <- getLine
-    print ("formula = " ++ formula)
+    resultado <- bar
+    print resultado
 
 
 ------- Input -------
-
-getProgram :: IO ()
-getProgram = do
-  print "Digite a formula para ser verificada: "
-  line <- getLine
-  print line
-  print (ajeita line)
 
 countOpenParens :: String -> Int
 countOpenParens str = length $ filter (== '(') str
@@ -51,10 +45,6 @@ splitByFormulaValue (c : cs) delim
 splitValue :: String -> [Char] -> [String]
 splitValue str = head . (filter (not . null) . map (\y -> if y == 'V' || y == 'F' then splitByFormulaValue str y else []))
 
--- v((avb),(b^a))
--- v(v(a,b),^(b,a))
--- "Vb>(a^(bva))"
--- "F(avb)v(a^b)"
 
 getSecondProgram :: [String] -> String
 getSecondProgram list = list !! 1
@@ -73,7 +63,7 @@ insert str list = [val, fstList, sndList, thrList]
     sndList = head (tail list)
     thrList = last list
 
-formula = "F(bva)^(b^a)"
+formula = "F(b^a)^(b^a)"
 
 ajeita :: String -> [String]
 ajeita str = insert (head (splitValue str str)) (executeFunc str)
