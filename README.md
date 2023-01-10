@@ -1,2 +1,2 @@
 # haskell
-Repositório para aprender Haskell para matéria Linguagens de Programação
+Repositório para tranalho de montar uma Árvore Tableaux em linguagem funcional Haskell para matéria Linguagens de Programação.
